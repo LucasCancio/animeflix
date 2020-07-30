@@ -1,7 +1,8 @@
-import React, { useState } from "react";
-import PageDefault from "../../../components/PageDefault";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import PageDefault from "../../../components/PageDefault";
 import FormField from "../../../components/FormField";
+import Button from "../../../components/Button";
 
 function CadastroCategoria() {
   const valoresIniciais = {
@@ -13,10 +14,9 @@ function CadastroCategoria() {
   const [values, setValues] = useState(valoresIniciais);
 
   function setValue(chave, valor) {
-    // chave: nome, descricao, bla, bli
     setValues({
       ...values,
-      [chave]: valor, // nome: 'valor'
+      [chave]: valor,
     });
   }
 
@@ -26,6 +26,15 @@ function CadastroCategoria() {
       infosDoEvento.target.value
     );
   }
+
+  useEffect(() => {
+    const URL = "http://localhost:8080/categorias";
+
+    fetch(URL).then(async (response) => {
+      const data = await response.json();
+      setCategorias([...data]);
+    });
+  }, []);
 
   return (
     <PageDefault>
@@ -67,7 +76,7 @@ function CadastroCategoria() {
           />
         </div>
 
-        <button>Cadastrar</button>
+        <Button>Cadastrar</Button>
       </form>
 
       <ul>
