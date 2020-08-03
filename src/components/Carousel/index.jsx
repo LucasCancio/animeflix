@@ -3,13 +3,20 @@ import { VideoCardGroupContainer, Title, ExtraLink } from "./styles";
 import VideoCard from "./components/VideoCard";
 import Slider, { SliderItem } from "./components/Slider";
 
-function Carousel({ ignoreFirstVideo, category }) {
+import PropTypes from "prop-types";
+
+function Carousel({ ignoreFirstVideo, category, indice }) {
+  console.log("indice", indice);
+
   const categoryTitle = category.titulo;
   const categoryColor = category.cor;
   const categoryExtraLink = category.link_extra;
   const videos = category.videos;
+
+  console.log("videos", videos);
+  
   return (
-    <VideoCardGroupContainer>
+    <VideoCardGroupContainer key={`video-${indice}`}>
       {categoryTitle && (
         <>
           <Title style={{ backgroundColor: categoryColor || "red" }}>
@@ -29,7 +36,7 @@ function Carousel({ ignoreFirstVideo, category }) {
           }
 
           return (
-            <SliderItem key={video.titulo}>
+            <SliderItem key={`slider_${video.titulo}_${index}`}>
               <VideoCard
                 videoTitle={video.titulo}
                 videoURL={video.url}
@@ -42,5 +49,16 @@ function Carousel({ ignoreFirstVideo, category }) {
     </VideoCardGroupContainer>
   );
 }
+
+Carousel.defaultProps = {
+  ignoreFirstVideo: false,
+  indice: 0,
+};
+
+Carousel.propTypes = {
+  ignoreFirstVideo: PropTypes.bool,
+  category: PropTypes.object.isRequired,
+  indice: PropTypes.number,
+};
 
 export default Carousel;

@@ -4,48 +4,38 @@ import PageDefault from "../../../components/PageDefault";
 import FormField from "../../../components/FormField";
 import Button from "../../../components/Button";
 
+import useForm from "../../../hooks/useForm";
+import categoriasRepository from "../../../repositories/categoriasRepository";
+
+
+
 function CadastroCategoria() {
   const valoresIniciais = {
-    nome: "",
+    titulo: "",
     descricao: "",
     cor: "",
   };
+
   const [categorias, setCategorias] = useState([]);
-  const [values, setValues] = useState(valoresIniciais);
 
-  function setValue(chave, valor) {
-    setValues({
-      ...values,
-      [chave]: valor,
-    });
-  }
-
-  function handleChange(infosDoEvento) {
-    setValue(
-      infosDoEvento.target.getAttribute("name"),
-      infosDoEvento.target.value
-    );
-  }
+  const { handleChange, values, clearForm } = useForm(valoresIniciais);
 
   useEffect(() => {
-    const URL = "http://localhost:8080/categorias";
-
-    fetch(URL).then(async (response) => {
-      const data = await response.json();
-      setCategorias([...data]);
+    categoriasRepository.getAll().then((categorias) => {
+      setCategorias(categorias);
     });
   }, []);
 
   return (
     <PageDefault>
-      <h1>Cadastro de Categoria: {values.nome}</h1>
+      <h1>Cadastro de Categoria:</h1>
 
       <form
         onSubmit={function handleSubmit(infosDoEvento) {
           infosDoEvento.preventDefault();
           setCategorias([...categorias, values]);
 
-          setValues(valoresIniciais);
+          clearForm(valoresIniciais);
         }}
       >
         <div>
@@ -76,12 +66,12 @@ function CadastroCategoria() {
           />
         </div>
 
-        <Button>Cadastrar</Button>
+        <Button type="submit">Cadastrar</Button>
       </form>
 
       <ul>
         {categorias.map((categoria, indice) => {
-          return <li key={`${categoria}${indice}`}>{categoria.nome}</li>;
+          return <li key={`${categoria}${indice}`}>{categoria.titulo}</li>;
         })}
       </ul>
 
