@@ -11,13 +11,17 @@ const Main = styled.main`
   padding-left: 5%;
   padding-right: 5%;
 
-  ${({ paddingAll }) =>
+  ${({ paddingAll }: Props) =>
     css`
       padding: ${paddingAll};
     `}
 `;
 
-function PageDefault({ children, paddingAll }) {
+interface Props {
+  paddingAll?: number; 
+}
+
+const PageDefault: React.FC<Props> = ({ children, paddingAll }) => {
   return (
     <>
       <Menu />
@@ -25,6 +29,6 @@ function PageDefault({ children, paddingAll }) {
       <Footer />
     </>
   );
-}
+};
 
 export default PageDefault;

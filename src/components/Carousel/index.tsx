@@ -1,20 +1,24 @@
 import React from "react";
-import { VideoCardGroupContainer, Title, ExtraLink } from "./styles";
+import { VideoCardGroupContainer, Title } from "./styles";
 import VideoCard from "./components/VideoCard";
 import Slider, { SliderItem } from "./components/Slider";
+import Category from "../../models/Category";
 
-import PropTypes from "prop-types";
+interface Props {
+  ignoreFirstVideo?: boolean;
+  category: Category;
+  indice: number;
+}
 
-function Carousel({ ignoreFirstVideo, category, indice }) {
+const Carousel: React.FC<Props> = ({ ignoreFirstVideo, category, indice }) => {
   console.log("indice", indice);
 
   const categoryTitle = category.titulo;
   const categoryColor = category.cor;
-  const categoryExtraLink = category.link_extra;
   const videos = category.videos;
 
   console.log("videos", videos);
-  
+
   return (
     <VideoCardGroupContainer key={`video-${indice}`}>
       {categoryTitle && (
@@ -22,11 +26,6 @@ function Carousel({ ignoreFirstVideo, category, indice }) {
           <Title style={{ backgroundColor: categoryColor || "red" }}>
             {categoryTitle}
           </Title>
-          {categoryExtraLink && (
-            <ExtraLink href={categoryExtraLink.url} target="_blank">
-              {categoryExtraLink.text}
-            </ExtraLink>
-          )}
         </>
       )}
       <Slider>
@@ -38,6 +37,7 @@ function Carousel({ ignoreFirstVideo, category, indice }) {
           return (
             <SliderItem key={`slider_${video.titulo}_${index}`}>
               <VideoCard
+                imageURL={video.image_url}
                 videoTitle={video.titulo}
                 videoURL={video.url}
                 categoryColor={categoryColor}
@@ -48,17 +48,6 @@ function Carousel({ ignoreFirstVideo, category, indice }) {
       </Slider>
     </VideoCardGroupContainer>
   );
-}
-
-Carousel.defaultProps = {
-  ignoreFirstVideo: false,
-  indice: 0,
-};
-
-Carousel.propTypes = {
-  ignoreFirstVideo: PropTypes.bool,
-  category: PropTypes.object.isRequired,
-  indice: PropTypes.number,
 };
 
 export default Carousel;
